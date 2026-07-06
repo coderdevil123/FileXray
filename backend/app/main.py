@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 
-
 from app.core.config import settings
 from app.api.v1.routes import router
+
+from app.database.init_db import create_database
 
 
 app = FastAPI(
@@ -10,6 +11,12 @@ app = FastAPI(
     description=settings.DESCRIPTION,
     version=settings.VERSION,
 )
+
+
+@app.on_event("startup")
+def startup():
+
+    create_database()
 
 
 app.include_router(
@@ -22,6 +29,6 @@ app.include_router(
 def root():
 
     return {
-        "message": "Welcome to FileXray",
-        "version": settings.VERSION
+        "message":"Welcome to FileXray",
+        "version":settings.VERSION
     }
