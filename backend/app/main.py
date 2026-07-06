@@ -1,23 +1,27 @@
 from fastapi import FastAPI
 
 
+from app.core.config import settings
+from app.api.v1.routes import router
+
+
 app = FastAPI(
-    title="FileXray API",
-    description="Static Malware Analysis & File Triage Platform",
-    version="1.0.0",
+    title=settings.PROJECT_NAME,
+    description=settings.DESCRIPTION,
+    version=settings.VERSION,
+)
+
+
+app.include_router(
+    router,
+    prefix=settings.API_PREFIX
 )
 
 
 @app.get("/")
 def root():
-    return {
-        "project": "FileXray",
-        "status": "running"
-    }
 
-
-@app.get("/health")
-def health_check():
     return {
-        "status": "healthy"
+        "message": "Welcome to FileXray",
+        "version": settings.VERSION
     }
