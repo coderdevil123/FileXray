@@ -1,9 +1,10 @@
 from app.core.logger import setup_logger
-
+from app.analyzers.common.hash import HashAnalyzer
 
 logger = setup_logger(
     "AnalysisEngine"
 )
+hash_analyzer = HashAnalyzer()
 
 
 class AnalysisService:
@@ -20,18 +21,14 @@ class AnalysisService:
         )
 
 
+        hash_result = HashAnalyzer().analyze(file_path)
         results = {
-
             "file": file_path,
-
-            "analysis": {}
-
+            "analysis": {
+                "hash": hash_result
+            }
         }
-
-
         # Future analyzers connect here
-
-
         logger.info(
             "Analysis completed"
         )
