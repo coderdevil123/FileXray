@@ -1,0 +1,7 @@
+powershell.exe
+
+https://evil.com
+
+cmd.exe
+
+192.168.1.5

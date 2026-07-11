@@ -1,10 +1,9 @@
 from fastapi import FastAPI
-
 from app.core.config import settings
 from app.api.v1.routes import router
-
 from app.database.init_db import create_database
-
+from app.core.handlers import filexray_exception_handler
+from app.core.exceptions import FileXrayException
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -12,6 +11,10 @@ app = FastAPI(
     version=settings.VERSION,
 )
 
+app.add_exception_handler(
+    FileXrayException,
+    filexray_exception_handler
+)
 
 @app.on_event("startup")
 def startup():

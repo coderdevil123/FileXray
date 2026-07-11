@@ -1,0 +1,76 @@
+"use client";
+
+import { useRef } from "react";
+import { UploadCloud } from "lucide-react";
+import { uploadFile } from "@/services/uploadService";
+
+export default function UploadCard() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const browseFiles = () => {
+    inputRef.current?.click();
+  };
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    try {
+      console.log("Uploading:", file.name);
+
+      const result = await uploadFile(file);
+
+      console.log(result);
+    } catch (error) {
+      console.error("Upload failed:", error);
+    }
+  };
+
+  return (
+    <div className="rounded-2xl border-2 border-dashed border-zinc-700 bg-zinc-900 p-12 text-center transition hover:border-emerald-500">
+      <UploadCloud className="mx-auto h-16 w-16 text-emerald-500" />
+
+      <h2 className="mt-6 text-3xl font-bold">
+        Drag & Drop Files
+      </h2>
+
+      <p className="mt-3 text-zinc-400">
+        Upload suspicious files for comprehensive static analysis.
+      </p>
+
+      <input
+        ref={inputRef}
+        type="file"
+        hidden
+        onChange={handleFileChange}
+      />
+
+      <button
+        onClick={browseFiles}
+        className="mt-8 rounded-xl bg-emerald-500 px-8 py-3 font-semibold text-black transition hover:bg-emerald-400"
+      >
+        Browse Files
+      </button>
+
+      <div className="mt-8 flex flex-wrap justify-center gap-2">
+        {["EXE", "DLL", "PDF", "DOCX", "ZIP", "TXT"].map((type) => (
+          <span
+            key={type}
+            className="rounded-md bg-zinc-800 px-3 py-1 text-sm text-zinc-300"
+          >
+            {type}
+          </span>
+        ))}
+      </div>
+
+      <p className="mt-6 text-sm text-zinc-500">
+        Maximum upload size: 100 MB
+      </p>
+    </div>
+  );
+}
