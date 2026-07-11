@@ -1,0 +1,3 @@
+ENGINE_NAME = "FileXray"
+ENGINE_VERSION = "1.0.0"
+ENGINE_AUTHOR = "Shubhang Mishra"

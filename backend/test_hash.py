@@ -1,7 +1,10 @@
-from app.services.analysis_service import AnalysisService
+from pprint import pprint
+from app.services.analysis_pipeline import AnalysisPipeline
 
-engine = AnalysisService()
+pipeline = AnalysisPipeline()
 
-result = engine.analyze("C:\\Users\\ASUS\\FileXray\\README.md")
+result = pipeline.run(
+    r"C:\Users\ASUS\FileXray\README.md"
+)
 
-print(result)
+pprint(result)
