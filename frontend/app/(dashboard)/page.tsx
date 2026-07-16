@@ -1,3 +1,5 @@
+"use client";
+import { useAnalysisStore } from "@/store/analysis-store";
 import UploadCard from "@/features/upload/UploadCard";
 import StatCard from "@/features/dashboard/StatCard";
 import {
@@ -16,10 +18,14 @@ import AISummaryCard from "@/features/analysis/AISummaryCard";
 import Timeline from "@/features/dashboard/Timeline";
 import RecentScans from "@/features/dashboard/RecentScans";
 import QuickActions from "@/features/dashboard/QuickAccess";
+import LoadingOverlay from "@/features/shared/LoadingOverlay";
 
 export default function DashboardPage() {
+  const { analysis, loading } = useAnalysisStore();
   return (
-    <div className="mx-auto max-w-7xl space-y-10 px-6 py-10">
+    <>
+      {loading && <LoadingOverlay />}
+      <div className="mx-auto max-w-7xl space-y-10 px-6 py-10">
 
       <section>
 
@@ -47,13 +53,21 @@ export default function DashboardPage() {
 
       <section>
         <RiskCard
-            score={mockAnalysis.risk.score}
-            level={mockAnalysis.risk.level}
+            score={
+                analysis
+                    ? analysis.risk.score
+                    : mockAnalysis.risk.score
+            }
+            level={
+                analysis
+                    ? analysis.risk.level
+                    : mockAnalysis.risk.level
+            }
         />
       </section>
 
       <section>
-        <AISummaryCard analysis={mockAnalysis}/>
+        <AISummaryCard analysis={analysis ?? mockAnalysis} />
       </section>
 
       <section>
@@ -69,10 +83,10 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <MetadataCard analysis={mockAnalysis} />
-        <HashCard analysis={mockAnalysis} />
-        <EntropyCard analysis={mockAnalysis} />
-        <IOCCard analysis={mockAnalysis} />
+        <MetadataCard analysis={analysis ?? mockAnalysis} />
+        <HashCard analysis={analysis ?? mockAnalysis} />
+        <EntropyCard analysis={analysis ?? mockAnalysis} />
+        <IOCCard analysis={analysis ?? mockAnalysis} />
       </section>
 
       <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -104,6 +118,7 @@ export default function DashboardPage() {
       </section>
 
 
-    </div>
+      </div>
+    </>
   );
 }

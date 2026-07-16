@@ -1,38 +1,100 @@
 "use client";
-
+import { useState } from "react";
+import { useAnalysisStore } from "@/store/analysis-store";
 import { useRef } from "react";
 import { UploadCloud } from "lucide-react";
 import { uploadFile } from "@/services/uploadService";
-
+import { toast } from "sonner";
 export default function UploadCard() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const {
+  setAnalysis,
+  setLoading,
+} = useAnalysisStore();
+
+  const [dragging, setDragging] = useState(false);
 
   const browseFiles = () => {
     inputRef.current?.click();
+  };
+
+  const handleDrop = async (
+      event: React.DragEvent<HTMLDivElement>
+  ) => {
+      event.preventDefault();
+      setDragging(false);
+      const file = event.dataTransfer.files[0];
+      if (!file) return;
+      await analyzeFile(file)
+      setSelectedFile(file);
+      setLoading(true);
+      try {
+          const result = await uploadFile(file);
+          setAnalysis(result.data.analysis);
+      } catch (error) {
+          console.error(error);
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  const handleDragOver = (
+      event: React.DragEvent<HTMLDivElement>
+  ) => {
+      event.preventDefault();
+      setDragging(true);
+  };
+
+  const handleDragLeave = () => {
+      setDragging(false);
+  };
+
+  const analyzeFile = async (
+      file: File
+    ) => {
+      setSelectedFile(file);
+      setLoading(true);
+      try {
+          const result = await uploadFile(file);
+          setAnalysis(result.data.analysis);
+      } catch (error) {
+          console.error(error);
+      } finally {
+          setLoading(false);
+      }
   };
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-
+    setSelectedFile(file ?? null);
     if (!file) {
       return;
     }
-
+    await analyzeFile(file);
+    setLoading(true);
     try {
-      console.log("Uploading:", file.name);
-
       const result = await uploadFile(file);
 
-      console.log(result);
+      setAnalysis(result.data.analysis);
+
     } catch (error) {
-      console.error("Upload failed:", error);
+      console.error(error);
+
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="rounded-2xl border-2 border-dashed border-zinc-700 bg-zinc-900 p-12 text-center transition hover:border-emerald-500">
+    <div
+      className="rounded-2xl border-2 border-dashed border-zinc-700 bg-zinc-900 p-12 text-center transition hover:border-emerald-500"
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       <UploadCloud className="mx-auto h-16 w-16 text-emerald-500" />
 
       <h2 className="mt-6 text-3xl font-bold">
@@ -56,6 +118,16 @@ export default function UploadCard() {
       >
         Browse Files
       </button>
+
+      {selectedFile && (
+        <div className="mt-6 rounded-lg border border-zinc-800 bg-zinc-800/50 p-4 text-left">
+          <p className="font-medium">{selectedFile.name}</p>
+
+          <p className="text-sm text-zinc-400">
+            {(selectedFile.size / 1024).toFixed(2)} KB
+          </p>
+        </div>
+      )}
 
       <div className="mt-8 flex flex-wrap justify-center gap-2">
         {["EXE", "DLL", "PDF", "DOCX", "ZIP", "TXT"].map((type) => (
