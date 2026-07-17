@@ -19,9 +19,39 @@ import Timeline from "@/features/dashboard/Timeline";
 import RecentScans from "@/features/dashboard/RecentScans";
 import QuickActions from "@/features/dashboard/QuickAccess";
 import LoadingOverlay from "@/features/shared/LoadingOverlay";
+import ScanOverview from "@/features/analysis/ScanOverview";
 
 export default function DashboardPage() {
   const { analysis, loading } = useAnalysisStore();
+  const dashboardAnalysis = analysis
+  ? {
+      risk: analysis.risk,
+
+      metadata: {
+        filename: analysis.analysis.metadata.data.filename,
+        size: analysis.analysis.metadata.data.size,
+        type: analysis.analysis.metadata.data.mime_type,
+      },
+
+      hash: analysis.analysis.hash.data,
+
+      entropy: {
+        value: analysis.analysis.entropy.data.entropy,
+      },
+
+      ioc: {
+        urls: analysis.analysis.ioc.data.url_count,
+        ips: analysis.analysis.ioc.data.ipv4_count,
+      },
+
+      aiSummary: {
+        title: analysis.risk.level,
+        summary:
+          analysis.risk.findings.join(". ") ||
+          "No suspicious indicators detected.",
+      },
+    }
+  : mockAnalysis;
   return (
     <>
       {loading && <LoadingOverlay />}
@@ -50,24 +80,20 @@ export default function DashboardPage() {
         <section>
             <UploadCard />
         </section>
-
+        {analysis && (
+          <section>
+            <ScanOverview analysis={analysis} />
+          </section>
+        )}
       <section>
         <RiskCard
-            score={
-                analysis
-                    ? analysis.risk.score
-                    : mockAnalysis.risk.score
-            }
-            level={
-                analysis
-                    ? analysis.risk.level
-                    : mockAnalysis.risk.level
-            }
+            score={dashboardAnalysis.risk.score}
+            level={dashboardAnalysis.risk.level}
         />
       </section>
 
       <section>
-        <AISummaryCard analysis={analysis ?? mockAnalysis} />
+        <AISummaryCard analysis={dashboardAnalysis} />
       </section>
 
       <section>
@@ -83,10 +109,10 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <MetadataCard analysis={analysis ?? mockAnalysis} />
-        <HashCard analysis={analysis ?? mockAnalysis} />
-        <EntropyCard analysis={analysis ?? mockAnalysis} />
-        <IOCCard analysis={analysis ?? mockAnalysis} />
+        <MetadataCard analysis={dashboardAnalysis} />
+        <HashCard analysis={dashboardAnalysis} />
+        <EntropyCard analysis={dashboardAnalysis} />
+        <IOCCard analysis={dashboardAnalysis} />
       </section>
 
       <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">

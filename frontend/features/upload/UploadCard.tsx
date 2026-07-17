@@ -11,6 +11,7 @@ export default function UploadCard() {
   const {
   setAnalysis,
   setLoading,
+  setRefresh,
 } = useAnalysisStore();
 
   const [dragging, setDragging] = useState(false);
@@ -32,6 +33,7 @@ export default function UploadCard() {
       try {
           const result = await uploadFile(file);
           setAnalysis(result.data.analysis);
+          setRefresh();
       } catch (error) {
           console.error(error);
       } finally {
@@ -58,6 +60,7 @@ export default function UploadCard() {
       try {
           const result = await uploadFile(file);
           setAnalysis(result.data.analysis);
+          setRefresh();
       } catch (error) {
           console.error(error);
       } finally {
@@ -79,7 +82,7 @@ export default function UploadCard() {
       const result = await uploadFile(file);
 
       setAnalysis(result.data.analysis);
-
+      setRefresh();
     } catch (error) {
       console.error(error);
 

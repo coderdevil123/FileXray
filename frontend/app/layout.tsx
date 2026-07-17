@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import { Toaster } from "sonner";
 export const metadata: Metadata = {
   title: "FileXray",
   description: "AI Assisted Static Malware Analysis Platform",
@@ -14,6 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="bg-zinc-950 text-white">
+        <Toaster richColors position="top-right" />
         {children}
       </body>
     </html>

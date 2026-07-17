@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 from sqlalchemy.orm import Session
-
+from app.schemas.scan import ScanResponse
 from app.database.session import get_database
 from app.models.scan import Scan
 from app.schemas.analysis import AnalysisResponse
@@ -29,18 +29,20 @@ def upload_file(
         file_type=file.content_type,
         risk_score=analysis["risk"]["score"],
         risk_level=analysis["risk"]["level"],
-        report_path=file_path
+        report_path=file_path,
+        analysis_result=analysis
     )
 
     database.add(scan)
     database.commit()
     database.refresh(scan)
+    scan_response = ScanResponse.model_validate(scan)
 
     return {
         "success": True,
         "message": "Analysis completed successfully.",
         "data": {
-            "scan": scan,
+            "scan": scan_response,
             "analysis": analysis
         }
     }
