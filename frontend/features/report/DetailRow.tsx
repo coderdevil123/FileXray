@@ -1,6 +1,6 @@
 interface Props{
   label:string;
-  value:string;
+  value:React.ReactNode;
 }
 
 export default function DetailRow({

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import ScanDetailsDrawer from "@/features/report/ScanDetailsDrawer";
 import { useHistory } from "@/hooks/useHistory";
+import RiskBadge from "@/components/RiskBadge";
 export default function RecentScans() {
   const { history } = useHistory();
   const [selected,setSelected]=useState<any>(null);
@@ -11,6 +12,17 @@ export default function RecentScans() {
         Recent Scans
       </h2>
       <div className="space-y-4">
+        {history.length === 0 && (
+          <div className="rounded-lg border border-dashed border-zinc-700 p-10 text-center">
+            <p className="text-lg font-medium text-zinc-300">
+              No scans yet
+            </p>
+
+            <p className="mt-2 text-sm text-zinc-500">
+              Upload a file to begin analysis.
+            </p>
+          </div>
+        )}
         {history.map((scan: any) => (
           <div
             key={scan.id}
@@ -23,17 +35,7 @@ export default function RecentScans() {
                 {new Date(scan.created_at).toLocaleString()}
               </p>
             </div>
-            <span
-              className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                scan.risk_level === "HIGH"
-                  ? "bg-red-500/15 text-red-400"
-                  : scan.risk_level === "MEDIUM"
-                  ? "bg-amber-500/15 text-amber-400"
-                  : "bg-emerald-500/15 text-emerald-400"
-              }`}
-            >
-              {scan.risk_level}
-            </span>
+            <RiskBadge level={scan.risk_level} />
           </div>
         ))}
         <ScanDetailsDrawer
