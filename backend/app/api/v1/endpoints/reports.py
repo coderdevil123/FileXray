@@ -10,9 +10,14 @@ from fastapi import HTTPException
 from fastapi.responses import FileResponse
 import os
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Reports"]
+)
 
 @router.get("/download/{filename}")
+logger.info(
+    f"Downloading report: {filename}"
+)
 def download_report(filename:str):
     path=os.path.join(
         "reports",
@@ -28,7 +33,11 @@ def download_report(filename:str):
         filename=filename
     )
 
-@router.post("/generate/{scan_id}")
+@router.post(
+    "/generate/{scan_id}",
+    summary="Generate Report",
+    description="Generate PDF, HTML or JSON report for a completed scan."
+)
 def generate_report(
     scan_id: int,
     format: str = "json",

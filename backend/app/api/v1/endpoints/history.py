@@ -3,7 +3,9 @@ from sqlalchemy.orm import Session
 from app.database.session import get_database
 from app.models.scan import Scan
 
-router = APIRouter()
+router = APIRouter(
+    tags=["History"]
+)
 
 @router.get("/")
 def get_history(

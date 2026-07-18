@@ -35,6 +35,7 @@ class HTMLGenerator:
             "{{emails}}": ", ".join(report["ioc"]["emails"]) or "None",
             "{{ips}}": ", ".join(report["ioc"]["ips"]) or "None",
             "{{recommendations}}": recommendations,
+            "{{execution_time}}":str(report["execution_time"]),
         }
 
         for key, value in replacements.items():

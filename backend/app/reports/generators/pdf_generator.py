@@ -58,6 +58,12 @@ class PDFGenerator:
             )
         )
         story.append(
+            Paragraph(
+                f"<b>Execution Time:</b> {report['execution_time']} sec",
+                styles["BodyText"]
+            )
+        )
+        story.append(
             Spacer(
                 1,
                 20,

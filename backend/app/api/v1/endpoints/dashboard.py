@@ -6,7 +6,9 @@ from fastapi import Depends
 from app.database.session import get_database
 from app.models.scan import Scan
 
-router = APIRouter()
+router = APIRouter(
+    tags=["Dashboard"]
+)
 
 @router.get("/stats")
 def dashboard_stats(

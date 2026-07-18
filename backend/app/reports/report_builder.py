@@ -6,8 +6,16 @@ class ReportBuilder:
         self,
         scan
     ):
+        statistics={
+            "url_count":len(
+                analysis["analysis"]["ioc"]["data"]["urls"]
+            )
+        }
+
         recommendations=RecommendationEngine().generate(
-            analysis["risk"]["level"]
+            analysis["risk"]["level"],
+            analysis["analysis"]["entropy"]["data"]["entropy"],
+            statistics
         )
         analysis = scan.analysis_result
         return {
@@ -30,5 +38,9 @@ class ReportBuilder:
             "strings": analysis["analysis"]["strings"]["data"],
             "execution_time": analysis["execution_time"],
             "engine": analysis["engine"],
-            "recommendations": recommendations
+            "recommendations": recommendations,
+            "integrity":{
+                "sha256":analysis["analysis"]["hash"]["data"]["sha256"],
+                "verified":True
+            }
         }

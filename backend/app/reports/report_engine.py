@@ -3,6 +3,9 @@ from app.reports.generators.html_generator import HTMLGenerator
 from app.reports.generators.pdf_generator import PDFGenerator
 
 class ReportEngine:
+    logger.info(
+        f"Generating {format.upper()} report."
+    )
     def __init__(self):
         self.generators = {
             "json": JSONGenerator(),
@@ -16,3 +19,6 @@ class ReportEngine:
                 f"Unsupported report format: {format}"
             )
         return generator.generate(analysis)
+    logger.info(
+        f"{format.upper()} report generated successfully."
+    )

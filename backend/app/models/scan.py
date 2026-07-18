@@ -4,6 +4,7 @@ from sqlalchemy import String
 from sqlalchemy import DateTime
 from sqlalchemy import Float
 from sqlalchemy import JSON
+from sqlalchemy import Boolean
 from datetime import datetime
 
 from app.database.base import Base
@@ -48,6 +49,16 @@ class Scan(Base):
 
     analysis_result = Column(
         JSON,
+        nullable=True
+    )
+
+    report_generated=Column(
+        Boolean,
+        default=False
+    )
+
+    report_format=Column(
+        String,
         nullable=True
     )
 

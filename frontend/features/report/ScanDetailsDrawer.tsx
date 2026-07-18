@@ -36,10 +36,7 @@ export default function ScanDetailsDrawer({
             analysis.id,
             format
         );
-
-        const filename=response.report.split("\\").pop();
-
-        downloadReport(filename);
+        downloadReport(response.filename);
     };
     
   return(

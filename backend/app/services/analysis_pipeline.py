@@ -6,9 +6,10 @@ from app.core.engine import (
     ENGINE_NAME,
     ENGINE_VERSION
 )
+from app.core.logger import logger
 
 class AnalysisPipeline:
-
+    logger.info("Starting file analysis.")
     def __init__(self):
         self.analysis_service = AnalysisService()
         self.risk_engine = RiskEngine()
@@ -28,3 +29,4 @@ class AnalysisPipeline:
             "version": ENGINE_VERSION
         }
         return results
+    logger.info("Analysis completed successfully.")

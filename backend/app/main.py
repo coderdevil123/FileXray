@@ -5,12 +5,17 @@ from app.database.init_db import create_database
 from app.core.handlers import filexray_exception_handler
 from app.core.exceptions import FileXrayException
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.core.exceptions import register_exception_handlers
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description=settings.DESCRIPTION,
     version=settings.VERSION,
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
 )
+
+register_exception_handlers(app)
 
 app.add_middleware(
     CORSMiddleware,

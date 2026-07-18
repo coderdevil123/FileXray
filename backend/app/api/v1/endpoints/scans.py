@@ -7,12 +7,15 @@ from app.schemas.analysis import AnalysisResponse
 from app.services.analysis_pipeline import AnalysisPipeline
 from app.utils.file_handler import save_uploaded_file
 
-router = APIRouter()
-
+router = APIRouter(
+    tags=["Scans"]
+)
 
 @router.post(
     "/upload",
-    response_model=AnalysisResponse
+    response_model=AnalysisResponse,
+    summary="Upload File for Analysis",
+    description="Upload a file for security analysis and return the results."
 )
 def upload_file(
     file: UploadFile = File(...),
