@@ -1,5 +1,9 @@
 import DetailRow from "./DetailRow";
 import RiskBadge from "@/components/RiskBadge";
+import {
+    generateReport,
+    downloadReport
+} from "@/services/reportService";
 
 interface Props{
   open:boolean;
@@ -22,6 +26,22 @@ export default function ScanDetailsDrawer({
     if (!result) {
         return null;
     }
+
+    const exportReport=async(
+        format:"pdf"|"html"|"json"
+    )=>{
+        if(!analysis?.id)return;
+
+        const response=await generateReport(
+            analysis.id,
+            format
+        );
+
+        const filename=response.report.split("\\").pop();
+
+        downloadReport(filename);
+    };
+    
   return(
 
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300">

@@ -49,7 +49,10 @@ def generate_report(
         analysis=report,
         format=format
     )
+    filename=os.path.basename(path)
+
     return {
-        "success": True,
-        "report": path
+        "success":True,
+        "filename":filename,
+        "download_url":f"/api/v1/reports/download/{filename}"
     }
