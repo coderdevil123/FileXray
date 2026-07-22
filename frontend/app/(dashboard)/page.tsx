@@ -20,9 +20,12 @@ import RecentScans from "@/features/dashboard/RecentScans";
 import QuickActions from "@/features/dashboard/QuickAccess";
 import LoadingOverlay from "@/features/shared/LoadingOverlay";
 import ScanOverview from "@/features/analysis/ScanOverview";
+import { useDashboardStats } from "@/hooks/useDashboardStats";
 
 export default function DashboardPage() {
-  const { analysis, loading } = useAnalysisStore();
+  const { analysis, scan, loading } = useAnalysisStore();
+  const { stats } = useDashboardStats();
+
   const dashboardAnalysis = analysis
   ? {
       risk: analysis.risk,
@@ -52,6 +55,9 @@ export default function DashboardPage() {
       },
     }
   : mockAnalysis;
+
+  const threatScore = analysis?.risk?.level ?? stats?.latest_risk ?? "Safe";
+
   return (
     <>
       {loading && <LoadingOverlay />}
@@ -77,7 +83,7 @@ export default function DashboardPage() {
 
       </section>
 
-        <section>
+        <section id="upload-section">
             <UploadCard />
         </section>
         {analysis && (
@@ -96,12 +102,12 @@ export default function DashboardPage() {
         <AISummaryCard analysis={dashboardAnalysis} />
       </section>
 
-      <section>
+      <section id="recent-scans">
         <RecentScans/>
       </section>
 
-      <section>
-        <QuickActions/>
+      <section id="quick-actions">
+        <QuickActions scan={scan} />
       </section>
 
       <section>
@@ -119,13 +125,13 @@ export default function DashboardPage() {
 
         <StatCard
         title="Files Scanned"
-        value="0"
+        value={stats?.files_scanned?.toString() ?? "0"}
         icon={Files}
         />
 
         <StatCard
         title="Threat Score"
-        value="Safe"
+        value={threatScore}
         icon={Shield}
         />
 
@@ -137,7 +143,7 @@ export default function DashboardPage() {
 
         <StatCard
         title="Reports"
-        value="0"
+        value={stats?.reports?.toString() ?? "0"}
         icon={FileCheck}
         />
 
