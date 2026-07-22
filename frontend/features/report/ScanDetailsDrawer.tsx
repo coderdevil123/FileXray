@@ -71,6 +71,26 @@ export default function ScanDetailsDrawer({
           >
             Close
           </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => exportReport("pdf")}
+              className="rounded-lg bg-emerald-500 px-4 py-2 text-sm font-medium text-black transition hover:bg-emerald-400"
+            >
+              Download PDF
+            </button>
+            <button
+              onClick={() => exportReport("html")}
+              className="rounded-lg bg-zinc-800 px-4 py-2 text-sm transition hover:bg-zinc-700"
+            >
+              HTML
+            </button>
+            <button
+              onClick={() => exportReport("json")}
+              className="rounded-lg bg-zinc-800 px-4 py-2 text-sm transition hover:bg-zinc-700"
+            >
+              JSON
+            </button>
+          </div>
           <div className="mt-8 rounded-xl border border-zinc-800 bg-zinc-800/40 p-5">
                 <h3 className="text-lg font-semibold">
                     Executive Summary
