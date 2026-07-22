@@ -1,12 +1,12 @@
 from app.reports.generators.json_generator import JSONGenerator
 from app.reports.generators.html_generator import HTMLGenerator
 from app.reports.generators.pdf_generator import PDFGenerator
-
+from app.core.logger import logger
 class ReportEngine:
-    logger.info(
-        f"Generating {format.upper()} report."
-    )
     def __init__(self):
+        logger.info(
+            f"Generating {format.upper()} report."
+        )
         self.generators = {
             "json": JSONGenerator(),
             "html": HTMLGenerator(),
@@ -18,7 +18,7 @@ class ReportEngine:
             raise ValueError(
                 f"Unsupported report format: {format}"
             )
+        logger.info(
+            f"{format.upper()} report generated successfully."
+        )
         return generator.generate(analysis)
-    logger.info(
-        f"{format.upper()} report generated successfully."
-    )

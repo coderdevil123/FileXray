@@ -7,7 +7,11 @@ router = APIRouter(
     tags=["History"]
 )
 
-@router.get("/")
+@router.get(
+    "",
+    summary="Get scan history",
+    description="Returns all previous scans stored in the database."
+)
 def get_history(
     database: Session = Depends(get_database)
 ):

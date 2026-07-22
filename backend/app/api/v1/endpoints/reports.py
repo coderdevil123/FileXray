@@ -1,24 +1,29 @@
 from fastapi import APIRouter
 from fastapi import Depends
-from sqlalchemy.orm import Session
-from app.reports.report_builder import ReportBuilder
-from app.database.session import get_database
-from app.models.scan import Scan
-from app.reports.report_engine import ReportEngine
-from fastapi.responses import FileResponse
 from fastapi import HTTPException
 from fastapi.responses import FileResponse
+from sqlalchemy.orm import Session
+from app.database.session import get_database
+from app.models.scan import Scan
+from app.reports.report_builder import ReportBuilder
+from app.reports.report_engine import ReportEngine
+from app.core.logger import logger
 import os
 
 router = APIRouter(
     tags=["Reports"]
 )
 
-@router.get("/download/{filename}")
-logger.info(
-    f"Downloading report: {filename}"
+@router.get(
+    "/download/{filename}",
+    summary="Download generated report",
+    description="Downloads a previously generated report."
 )
+
 def download_report(filename:str):
+    logger.info(
+        f"Downloading report: {filename}"
+    )
     path=os.path.join(
         "reports",
         filename
