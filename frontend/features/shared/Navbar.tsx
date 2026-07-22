@@ -16,10 +16,15 @@ export default function Navbar() {
         </div>
 
         <nav className="flex items-center gap-8 text-sm text-zinc-300">
-          <Link href="/">Dashboard</Link>
-          <Link href="#">Reports</Link>
-          <Link href="#">History</Link>
-          <Link href="#">Settings</Link>
+          <Link href="/" className="transition hover:text-emerald-500">
+            Dashboard
+          </Link>
+          <a href="#recent-scans" className="transition hover:text-emerald-500">
+            History
+          </a>
+          <a href="#quick-actions" className="transition hover:text-emerald-500">
+            Reports
+          </a>
         </nav>
       </div>
     </header>
