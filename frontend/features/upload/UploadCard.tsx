@@ -10,6 +10,7 @@ export default function UploadCard() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const {
   setAnalysis,
+  setScan,
   setLoading,
   setRefresh,
 } = useAnalysisStore();
@@ -20,6 +21,23 @@ export default function UploadCard() {
     inputRef.current?.click();
   };
 
+  const analyzeFile = async (file: File) => {
+    setSelectedFile(file);
+    setLoading(true);
+    try {
+      const result = await uploadFile(file);
+      setAnalysis(result.data.analysis);
+      setScan(result.data.scan);
+      setRefresh();
+      toast.success("Analysis completed successfully.");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to analyze file. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDrop = async (
       event: React.DragEvent<HTMLDivElement>
   ) => {
@@ -27,18 +45,7 @@ export default function UploadCard() {
       setDragging(false);
       const file = event.dataTransfer.files[0];
       if (!file) return;
-      await analyzeFile(file)
-      setSelectedFile(file);
-      setLoading(true);
-      try {
-          const result = await uploadFile(file);
-          setAnalysis(result.data.analysis);
-          setRefresh();
-      } catch (error) {
-          console.error(error);
-      } finally {
-          setLoading(false);
-      }
+      await analyzeFile(file);
   };
 
   const handleDragOver = (
@@ -52,22 +59,6 @@ export default function UploadCard() {
       setDragging(false);
   };
 
-  const analyzeFile = async (
-      file: File
-    ) => {
-      setSelectedFile(file);
-      setLoading(true);
-      try {
-          const result = await uploadFile(file);
-          setAnalysis(result.data.analysis);
-          setRefresh();
-      } catch (error) {
-          console.error(error);
-      } finally {
-          setLoading(false);
-      }
-  };
-
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -77,18 +68,6 @@ export default function UploadCard() {
       return;
     }
     await analyzeFile(file);
-    setLoading(true);
-    try {
-      const result = await uploadFile(file);
-
-      setAnalysis(result.data.analysis);
-      setRefresh();
-    } catch (error) {
-      console.error(error);
-
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
